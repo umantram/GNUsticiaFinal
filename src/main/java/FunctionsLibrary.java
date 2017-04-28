@@ -1,7 +1,6 @@
 import org.apache.commons.net.ftp.FTPClient;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import java.io.*;
 import java.net.SocketException;
 import java.sql.*;
 import java.sql.Connection;
@@ -155,7 +154,7 @@ public class FunctionsLibrary {
         return result;
     }
 
-    public  static ArrayList<String> selectFromDB(){
+    public  static String[] selectFromDB(){
 
         ArrayList<String> exptes = new ArrayList<String>();
 
@@ -178,15 +177,23 @@ public class FunctionsLibrary {
                 exptes.add(rs.getString(2));
             }
 
+            String[] exptesSalida = new String[exptes.size()];
+
+            for (int j = 0; j < exptes.size(); j++) {
+
+                exptesSalida[j] = exptes.get(j);
+
+            }
+
             conexion.close();
-            return exptes;
+            return exptesSalida;
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return exptes;
+        return new String[exptes.size()];
     }
 
     public static void insertIntoDB(String[] expedientes){
@@ -252,5 +259,61 @@ public class FunctionsLibrary {
 
     }
 
+    public static void muestraContenido(String urlArchivo, String[] exptes) throws FileNotFoundException, IOException {
 
+        String cadena;
+        FileReader f = new FileReader(urlArchivo);
+        BufferedReader b = new BufferedReader(f);
+
+        String a = "" ;
+
+        while((cadena = b.readLine())!=null) {
+
+            a = a + cadena + "\n";
+
+        }
+
+        b.close();
+
+        String[] array = a.split("----------------------------------------------------------------");
+
+        String textoSalidaYaFiltrado = "";
+
+        for (String pos: array) {
+
+            for (String pos2: exptes) {
+
+                if (pos.contains(pos2)){
+
+                    textoSalidaYaFiltrado = textoSalidaYaFiltrado + pos;
+                }
+
+            }
+
+        }
+
+        System.out.println(textoSalidaYaFiltrado);
+    }
+
+    /*
+    public static void main(String[] args) throws IOException {
+        muestraContenido("./GNUsticia/Cam_Civ_Sala_I_2017-04-21.txt");
+    }
+    */
+
+    public static void crearArchivoFinal(Localidad localidad, String fecha) throws FileNotFoundException {
+
+
+        for (String nombre : localidad.getNombresCaratulas()){
+
+            String url = "./GNUsticia/" + localidad.getName() + "/" + nombre + fecha + ".txt";
+
+            FileReader fr = new FileReader(url);
+            BufferedReader bf = new BufferedReader(fr);
+
+
+        }
+
+
+    }
 }
