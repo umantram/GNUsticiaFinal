@@ -18,7 +18,7 @@ public class Main {
         Localidad charata = Localidad.charata();*/
 
         //FunctionsLibrary.generarCarpetas();
-        FunctionsLibrary.descargarArchivo(resistencia);
+        //FunctionsLibrary.descargarArchivo(resistencia);
 
         //FunctionsLibrary.connectionDB();
 
